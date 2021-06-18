@@ -1,6 +1,6 @@
 import numpy as np
-from scipy.io.wavfile import read
 import torch
+from scipy.io.wavfile import read
 
 
 def get_mask_from_lengths(lengths):

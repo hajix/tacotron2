@@ -1,7 +1,8 @@
 import time
-import torch
 import sys
 import subprocess
+
+import torch
 
 argslist = list(sys.argv)[1:]
 num_gpus = torch.cuda.device_count()
@@ -12,10 +13,12 @@ argslist.append("--group_name=group_{}".format(job_id))
 
 for i in range(num_gpus):
     argslist.append('--rank={}'.format(i))
-    stdout = None if i == 0 else open("logs/{}_GPU_{}.log".format(job_id, i),
-                                      "w")
+    if i:
+        stdout = open("logs/{}_GPU_{}.log".format(job_id, i), "w")
+    else:
+        stdout = None
     print(argslist)
-    p = subprocess.Popen([str(sys.executable)]+argslist, stdout=stdout)
+    p = subprocess.Popen([str(sys.executable)] + argslist, stdout=stdout)
     workers.append(p)
     argslist = argslist[:-1]
 
